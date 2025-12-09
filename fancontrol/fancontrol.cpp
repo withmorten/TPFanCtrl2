@@ -404,20 +404,19 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 	}
 
 	if (SlimDialog == 1) {
-		if (this->StayOnTop)
-			this->hwndDialog = ::CreateDialogParam(hinstapp,
-				MAKEINTRESOURCE(9001),
-				HWND_DESKTOP,
-				(DLGPROC)BaseDlgProc,
-				(LPARAM)
-				this);
-		else
-			this->hwndDialog = ::CreateDialogParam(hinstapp,
-				MAKEINTRESOURCE(9003),
-				HWND_DESKTOP,
-				(DLGPROC)BaseDlgProc,
-				(LPARAM)
-				this);
+		this->hwndDialog = ::CreateDialogParam(hinstapp,
+			MAKEINTRESOURCE(9001),
+			HWND_DESKTOP,
+			(DLGPROC)BaseDlgProc,
+			(LPARAM)
+			this);
+
+		if (this->StayOnTop) {
+			LONG_PTR exStyle = ::GetWindowLongPtr(this->hwndDialog, GWL_EXSTYLE);
+			::SetWindowLongPtr(this->hwndDialog, GWL_EXSTYLE, exStyle | WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
+
+			::SetWindowPos(this->hwndDialog, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		}
 
 		if (this->hwndDialog) {
 			::GetWindowText(this->hwndDialog, this->Title, sizeof(this->Title));
@@ -849,6 +848,10 @@ FANCONTROL::DlgProc(HWND
 		case 2: // update window title
 			if (this->CurrentMode == 3 && this->MaxTemp > this->ManModeExitInternal) {
 				this->ModeToDialog(2);
+				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
+			}
+			else if (this->CurrentMode == 2 && this->MaxTemp <= this->ManModeExitInternal) {
+				this->ModeToDialog(3);
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}
 

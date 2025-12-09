@@ -56,7 +56,7 @@ FANCONTROL::HandleData(void) {
 	for (i = 0; i < 12; i++) {
 		sprintf_s(what, sizeof(what), "|%s|", this->State.SensorName[i]); // name (e.g. "|CPU|") to match against list above
 
-		if (this->State.Sensors[i] != 0x80 && this - State.Sensors[i] != 0x00 && strstr(list, what) == 0) {
+		if (this->State.Sensors[i] != 0x80 && this->State.Sensors[i] != 0x77 && this->State.Sensors[i] != 0x00 && strstr(list, what) == 0) {
 			int isens = this->State.Sensors[i];
 			int ioffs = this->SensorOffset[i].offs;
 
@@ -306,6 +306,8 @@ FANCONTROL::HandleData(void) {
 
 	if (this->CurrentMode == 3 && this->MaxTemp > this->ManModeExitInternal)
 		this->CurrentMode = 2;
+	else if (this->CurrentMode == 2 && this->MaxTemp <= this->ManModeExitInternal)
+		this->CurrentMode = 3;
 
 	return ok;
 }

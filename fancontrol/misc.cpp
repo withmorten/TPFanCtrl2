@@ -490,19 +490,18 @@ FANCONTROL::ReadConfig(const char* configfile)
 
 		fclose(f);
 
-		if (this->StayOnTop)
-			this->hwndDialog = ::CreateDialogParam(hinstapp,
+		this->hwndDialog = ::CreateDialogParam(hinstapp,
 				MAKEINTRESOURCE(9000),
 				HWND_DESKTOP,
 				(DLGPROC)BaseDlgProc,
 				(LPARAM)this);
 
-		else
-			this->hwndDialog = ::CreateDialogParam(hinstapp,
-				MAKEINTRESOURCE(9002),
-				HWND_DESKTOP,
-				(DLGPROC)BaseDlgProc,
-				(LPARAM)this);
+		if (this->StayOnTop) {
+			LONG_PTR exStyle = ::GetWindowLongPtr(this->hwndDialog, GWL_EXSTYLE);
+			::SetWindowLongPtr(this->hwndDialog, GWL_EXSTYLE, exStyle | WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
+
+			::SetWindowPos(this->hwndDialog, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		}
 
 		// end marker for smart levels array
 		if (lcnt1) {
