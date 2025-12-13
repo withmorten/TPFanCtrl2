@@ -400,7 +400,10 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 		_itoa_s(this->ManFanSpeed, buf, 10);
 
 		::SetDlgItemText(this->hwndDialog, 8310, buf);
-		this->hPowerNotify = RegisterPowerSettingNotification(this->hwndDialog, &GUID_LIDSWITCH_STATE_CHANGE, DEVICE_NOTIFY_WINDOW_HANDLE);
+
+		if (!this->IgnoreLidClose) {
+			this->hPowerNotify = RegisterPowerSettingNotification(this->hwndDialog, &GUID_LIDSWITCH_STATE_CHANGE, DEVICE_NOTIFY_WINDOW_HANDLE);
+		}
 	}
 
 	if (SlimDialog == 1) {
@@ -847,10 +850,10 @@ FANCONTROL::DlgProc(HWND
 
 		case 2: // update window title
 			if (this->CurrentMode == 3 && this->MaxTemp > this->ManModeExitInternal) {
-				this->ModeToDialog(2);
+				this->ModeToDialog(this->ManModeExitMode);
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}
-			else if (this->CurrentMode == 2 && this->MaxTemp <= this->ManModeExitInternal) {
+			else if (this->CurrentMode == this->ManModeExitMode && this->MaxTemp <= this->ManModeExitInternal) {
 				this->ModeToDialog(3);
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}

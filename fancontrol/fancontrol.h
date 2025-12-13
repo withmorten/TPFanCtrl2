@@ -147,6 +147,7 @@ protected:
 		HK_TG_12;
 	int EC_CTRL, EC_DATA;
 	int BluetoothEDR;
+	int ManModeExitMode;
 	int ManModeExit;
 	int ManModeExitInternal;
 	int ShowBiasedTemps;
@@ -155,6 +156,7 @@ protected:
 	int Log2File;
 	int Log2csv;
 	int StayOnTop;
+	int IgnoreLidClose;
 	int ShowAll;
 	int ShowTempIcon;
 	char IgnoreSensors[256];

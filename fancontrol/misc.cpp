@@ -266,6 +266,16 @@ FANCONTROL::ReadConfig(const char* configfile)
 				continue;
 			}
 
+			if (_strnicmp(buf, "Fahrenheit=", 11) == 0) {
+				this->Fahrenheit = atoi(buf + 11);
+				continue;
+			}
+
+			if (_strnicmp(buf, "ManModeExitMode=", 16) == 0) {
+				this->ManModeExitMode = atoi(buf + 16);
+				continue;
+			}
+
 			if (_strnicmp(buf, "ManModeExit=", 12) == 0) {
 				this->ManModeExit = atoi(buf + 12);
 				continue;
@@ -298,6 +308,11 @@ FANCONTROL::ReadConfig(const char* configfile)
 
 			if (_strnicmp(buf, "StayOnTop=", 10) == 0) {
 				this->StayOnTop = atoi(buf + 10);
+				continue;
+			}
+
+			if (_strnicmp(buf, "IgnoreLidClose=", 15) == 0) {
+				this->IgnoreLidClose = atoi(buf + 15);
 				continue;
 			}
 			
@@ -530,9 +545,6 @@ FANCONTROL::ReadConfig(const char* configfile)
 	if (hLockS == NULL) Runs_as_service = true;
 	if (WAIT_OBJECT_0 != WaitForSingleObject(hLockS, 0))
 		Runs_as_service = true;
-
-	//Offset Fahrenheit to Celsius
-	if (this->SmartLevels[0].temp >= 80) Fahrenheit = true;
 
 	// Set ProcessPriority
 	bool _SPC;
