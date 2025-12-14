@@ -150,6 +150,8 @@ protected:
 	int ManModeExitMode;
 	int ManModeExit;
 	int ManModeExitInternal;
+	int ManModeEntry;
+	int ManModeEntryInternal;
 	int ShowBiasedTemps;
 	int SecStartDelay;
 	char gSensorNames[17][4];

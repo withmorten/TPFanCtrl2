@@ -281,6 +281,11 @@ FANCONTROL::ReadConfig(const char* configfile)
 				continue;
 			}
 
+			if (_strnicmp(buf, "ManModeEntry=", 13) == 0) {
+				this->ManModeEntry = atoi(buf + 13);
+				continue;
+			}
+
 			if (_strnicmp(buf, "ShowBiasedTemps=", 16) == 0) {
 				this->ShowBiasedTemps = atoi(buf + 16);
 				continue;
@@ -663,7 +668,17 @@ FANCONTROL::ReadConfig(const char* configfile)
 	else
 		this->ManModeExitInternal = this->ManModeExit;
 
-	sprintf_s(buf, sizeof(buf), "  ManModeExit= %d, SecWinUptime= %d, SecStartDelay= %d", this->ManModeExit, this->SecWinUptime, this->SecStartDelay);
+	//ManModeEntry Fahrenheit to Celsius and v.v.
+
+	if (Fahrenheit && (this->ManModeEntry == 80))
+		this->ManModeEntry = (this->ManModeEntry * 9 / 5) + 32;
+
+	if (Fahrenheit)
+		this->ManModeEntryInternal = (this->ManModeEntry - 32) * 5 / 9;
+	else
+		this->ManModeEntryInternal = this->ManModeEntry;
+
+	sprintf_s(buf, sizeof(buf), "  ManModeExit= %d, ManModeEntry= %d, SecWinUptime= %d, SecStartDelay= %d", this->ManModeExit, this->ManModeEntry, this->SecWinUptime, this->SecStartDelay);
 	this->Trace(buf);
 
 	//Offset& Smartlevels Fahrenheit to Celsius

@@ -66,14 +66,18 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 	EC_DATA(0),
 	EC_CTRL(0),
 	BluetoothEDR(0),
+	ManModeExitMode(2),
 	ManModeExit(80),
 	ManModeExitInternal(80),
+	ManModeEntry(80),
+	ManModeEntryInternal(80),
 	ShowBiasedTemps(0),
 	SecWinUptime(0),
 	SlimDialog(0),
 	SecStartDelay(0),
 	Log2File(0),
 	StayOnTop(0),
+	IgnoreLidClose(0),
 	Log2csv(0),
 	ShowAll(0),
 	ShowTempIcon(1),
@@ -849,12 +853,20 @@ FANCONTROL::DlgProc(HWND
 			break;
 
 		case 2: // update window title
-			if (this->CurrentMode == 3 && this->MaxTemp > this->ManModeExitInternal) {
+			if (this->CurrentMode == 3 && this->ManModeExit && this->MaxTemp > this->ManModeExitInternal) {
 				this->ModeToDialog(this->ManModeExitMode);
+#ifdef _DEBUG
+				sprintf_s(obuf, sizeof(obuf), "DlgProc, Man -> Exit, %d > %d", this->MaxTemp, this->ManModeExitInternal);
+				this->Trace(obuf);
+#endif
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}
-			else if (this->CurrentMode == this->ManModeExitMode && this->MaxTemp <= this->ManModeExitInternal) {
+			else if (this->CurrentMode == this->ManModeExitMode && this->ManModeEntry && this->MaxTemp <= this->ManModeEntryInternal) {
 				this->ModeToDialog(3);
+#ifdef _DEBUG
+				sprintf_s(obuf, sizeof(obuf), "DlgProc, Exit -> Man, %d <= %d", this->MaxTemp, this->ManModeEntryInternal);
+				this->Trace(obuf);
+#endif
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}
 
