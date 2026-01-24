@@ -105,7 +105,7 @@ protected:
 	int FanSpeedLowByte;
 	int ActiveMode,
 		UseTWR,
-		ManFanSpeed,
+		ManFanSpeedLo,
 		FinalSeen;
 	int CurrentMode, fanctrl2,
 		PreviousMode;
@@ -147,11 +147,11 @@ protected:
 		HK_TG_12;
 	int EC_CTRL, EC_DATA;
 	int BluetoothEDR;
-	int ManModeExitMode;
-	int ManModeExit;
-	int ManModeExitInternal;
-	int ManModeEntry;
-	int ManModeEntryInternal;
+	int ManModeExitModeLo;
+	int ManModeExitLo;
+	int ManModeExitLoInternal;
+	int ManModeEntryLo;
+	int ManModeEntryLoInternal;
 	int ShowBiasedTemps;
 	int SecStartDelay;
 	char gSensorNames[17][4];

@@ -66,11 +66,11 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 	EC_DATA(0),
 	EC_CTRL(0),
 	BluetoothEDR(0),
-	ManModeExitMode(2),
-	ManModeExit(80),
-	ManModeExitInternal(80),
-	ManModeEntry(80),
-	ManModeEntryInternal(80),
+	ManModeExitModeLo(2),
+	ManModeExitLo(80),
+	ManModeExitLoInternal(80),
+	ManModeEntryLo(80),
+	ManModeEntryLoInternal(80),
 	ShowBiasedTemps(0),
 	SecWinUptime(0),
 	SlimDialog(0),
@@ -91,7 +91,7 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 	MinimizeOnClose(TRUE),
 	Runs_as_service(FALSE),
 	ActiveMode(false),
-	ManFanSpeed(7),
+	ManFanSpeedLo(7),
 	UseTWR(0),
 	FinalSeen(false),
 	m_fanTimer(NULL),
@@ -401,7 +401,7 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 
 		::SendDlgItemMessage(this->hwndDialog, 9200, EM_LIMITTEXT, 4096, 0);
 
-		_itoa_s(this->ManFanSpeed, buf, 10);
+		_itoa_s(this->ManFanSpeedLo, buf, 10);
 
 		::SetDlgItemText(this->hwndDialog, 8310, buf);
 
@@ -440,7 +440,7 @@ FANCONTROL::FANCONTROL(HINSTANCE hinstapp)
 
 			::SendDlgItemMessage(this->hwndDialog, 9200, EM_LIMITTEXT, 4096, 0);
 
-			_itoa_s(this->ManFanSpeed, buf, 10);
+			_itoa_s(this->ManFanSpeedLo, buf, 10);
 
 			::SetDlgItemText(this->hwndDialog, 8310, buf);
 
@@ -853,18 +853,18 @@ FANCONTROL::DlgProc(HWND
 			break;
 
 		case 2: // update window title
-			if (this->CurrentMode == 3 && this->ManModeExit && this->MaxTemp > this->ManModeExitInternal) {
-				this->ModeToDialog(this->ManModeExitMode);
+			if (this->CurrentMode == 3 && this->ManModeExitLo && this->MaxTemp > this->ManModeExitLoInternal) {
+				this->ModeToDialog(this->ManModeExitModeLo);
 #ifdef _DEBUG
-				sprintf_s(obuf, sizeof(obuf), "DlgProc, Man -> Exit, %d > %d", this->MaxTemp, this->ManModeExitInternal);
+				sprintf_s(obuf, sizeof(obuf), "DlgProc, Man -> Exit, %d > %d", this->MaxTemp, this->ManModeExitLoInternal);
 				this->Trace(obuf);
 #endif
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);
 			}
-			else if (this->CurrentMode == this->ManModeExitMode && this->ManModeEntry && this->MaxTemp <= this->ManModeEntryInternal) {
+			else if (this->CurrentMode == this->ManModeExitModeLo && this->ManModeEntryLo && this->MaxTemp <= this->ManModeEntryLoInternal) {
 				this->ModeToDialog(3);
 #ifdef _DEBUG
-				sprintf_s(obuf, sizeof(obuf), "DlgProc, Exit -> Man, %d <= %d", this->MaxTemp, this->ManModeEntryInternal);
+				sprintf_s(obuf, sizeof(obuf), "DlgProc, Exit -> Man, %d <= %d", this->MaxTemp, this->ManModeEntryLoInternal);
 				this->Trace(obuf);
 #endif
 				::PostMessage(this->hwndDialog, WM__GETDATA, 0, 0);

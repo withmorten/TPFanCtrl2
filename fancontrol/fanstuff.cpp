@@ -304,16 +304,16 @@ FANCONTROL::HandleData(void) {
 
 	this->PreviousMode = this->CurrentMode;
 
-	if (this->CurrentMode == 3 && this->ManModeExit && this->MaxTemp > this->ManModeExitInternal) {
-		this->CurrentMode = this->ManModeExitMode;
+	if (this->CurrentMode == 3 && this->ManModeExitLo && this->MaxTemp > this->ManModeExitLoInternal) {
+		this->CurrentMode = this->ManModeExitModeLo;
 #ifdef _DEBUG
-		sprintf_s(obuf, sizeof(obuf), "HandleData, Man -> Exit, %d > %d", this->MaxTemp, this->ManModeExitInternal);
+		sprintf_s(obuf, sizeof(obuf), "HandleData, Man -> Exit, %d > %d", this->MaxTemp, this->ManModeExitLoInternal);
 		this->Trace(obuf);
 #endif
-	} else if (this->CurrentMode == this->ManModeExitMode && this->ManModeEntry && this->MaxTemp <= this->ManModeEntryInternal) {
+	} else if (this->CurrentMode == this->ManModeExitModeLo && this->ManModeEntryLo && this->MaxTemp <= this->ManModeEntryLoInternal) {
 		this->CurrentMode = 3;
 #ifdef _DEBUG
-		sprintf_s(obuf, sizeof(obuf), "HandleData, Exit -> Man, %d <= %d", this->MaxTemp, this->ManModeEntryInternal);
+		sprintf_s(obuf, sizeof(obuf), "HandleData, Exit -> Man, %d <= %d", this->MaxTemp, this->ManModeEntryLoInternal);
 		this->Trace(obuf);
 #endif
 	}

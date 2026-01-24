@@ -72,8 +72,8 @@ FANCONTROL::ReadConfig(const char* configfile)
 				continue;
 			}
 
-			if (_strnicmp(buf, "ManFanSpeed=", 12) == 0) {
-				this->ManFanSpeed = atoi(buf + 12);
+			if (_strnicmp(buf, "ManFanSpeedLo=", 14) == 0) {
+				this->ManFanSpeedLo = atoi(buf + 14);
 				continue;
 			}
 
@@ -271,18 +271,18 @@ FANCONTROL::ReadConfig(const char* configfile)
 				continue;
 			}
 
-			if (_strnicmp(buf, "ManModeExitMode=", 16) == 0) {
-				this->ManModeExitMode = atoi(buf + 16);
+			if (_strnicmp(buf, "ManModeExitModeLo=", 18) == 0) {
+				this->ManModeExitModeLo = atoi(buf + 18);
 				continue;
 			}
 
-			if (_strnicmp(buf, "ManModeExit=", 12) == 0) {
-				this->ManModeExit = atoi(buf + 12);
+			if (_strnicmp(buf, "ManModeExitLo=", 14) == 0) {
+				this->ManModeExitLo = atoi(buf + 14);
 				continue;
 			}
 
-			if (_strnicmp(buf, "ManModeEntry=", 13) == 0) {
-				this->ManModeEntry = atoi(buf + 13);
+			if (_strnicmp(buf, "ManModeEntryLo=", 15) == 0) {
+				this->ManModeEntryLo = atoi(buf + 15);
 				continue;
 			}
 
@@ -660,25 +660,25 @@ FANCONTROL::ReadConfig(const char* configfile)
 
 	//ManModeExit Fahrenheit to Celsius and v.v.
 
-	if (Fahrenheit && (this->ManModeExit == 80))
-		this->ManModeExit = (this->ManModeExit * 9 / 5) + 32;
+	if (Fahrenheit && (this->ManModeExitLo == 80))
+		this->ManModeExitLo = (this->ManModeExitLo * 9 / 5) + 32;
 
 	if (Fahrenheit)
-		this->ManModeExitInternal = (this->ManModeExit - 32) * 5 / 9;
+		this->ManModeExitLoInternal = (this->ManModeExitLo - 32) * 5 / 9;
 	else
-		this->ManModeExitInternal = this->ManModeExit;
+		this->ManModeExitLoInternal = this->ManModeExitLo;
 
 	//ManModeEntry Fahrenheit to Celsius and v.v.
 
-	if (Fahrenheit && (this->ManModeEntry == 80))
-		this->ManModeEntry = (this->ManModeEntry * 9 / 5) + 32;
+	if (Fahrenheit && (this->ManModeEntryLo == 80))
+		this->ManModeEntryLo = (this->ManModeEntryLo * 9 / 5) + 32;
 
 	if (Fahrenheit)
-		this->ManModeEntryInternal = (this->ManModeEntry - 32) * 5 / 9;
+		this->ManModeEntryLoInternal = (this->ManModeEntryLo - 32) * 5 / 9;
 	else
-		this->ManModeEntryInternal = this->ManModeEntry;
+		this->ManModeEntryLoInternal = this->ManModeEntryLo;
 
-	sprintf_s(buf, sizeof(buf), "  ManModeExit= %d, ManModeEntry= %d, SecWinUptime= %d, SecStartDelay= %d", this->ManModeExit, this->ManModeEntry, this->SecWinUptime, this->SecStartDelay);
+	sprintf_s(buf, sizeof(buf), "  ManModeExitLo= %d, ManModeEntryLo= %d, SecWinUptime= %d, SecStartDelay= %d", this->ManModeExitLo, this->ManModeEntryLo, this->SecWinUptime, this->SecStartDelay);
 	this->Trace(buf);
 
 	//Offset& Smartlevels Fahrenheit to Celsius
